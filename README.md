@@ -246,21 +246,46 @@ Identified by first letter d - directory, s - socket, b - block device, l link, 
 
 ### Filesystem Hierarchy
 / - root partition  
-/bin - date, cp, etc commands  
+/bin - basic programs and binaries date, cp, etc commands  
 /boot  
-/dev  
-/etc - stores most config files  
-/home  
-/lib - shared libraries imported in to programs  
-/media - USB drive mounted under media all external media is mount under media  
-/mnt -  used to temporariy mount file systems  
+/dev - /dev file system contains special block and character device files.  Contains devices external hard disks, mouse and keyboard.  For example you will see a USB drive mounted under media with a /dev path.
+/etc - stores most configuration files  
+/home  - home directory contains all home directories for users except the root user.  The root user's home direct is located at /root
+/lib - and /lib64 shared libraries imported in to programs  
+/media - USB drive mounted under media all external media is mounted under media file systems 
+/mnt -  used to temporariy mount file systems to copy files or access other drives 
 /opt - install any 3rd part apps  
-/tmp - store temporary data  
-/usr - old systems kept home directory,  Now user space programs are kept here.  vi, browser  
-/var - system rights logs and cached data to var  
+/tmp - used to store temporary data  
+/usr - old systems kept home directory,  Now user space programs are kept here.  Or user land programs lke thunderbird email, and browser programs  
+/var - system writes logs and cached data to var  
 
-Use this command to see mounted devices
+Use this command to see all mounted file systesm
 ```
-$ df -hP
+ $ df -hP
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root        27G   18G  8.1G  69% /
+devtmpfs        1.8G     0  1.8G   0% /dev
+tmpfs           1.9G   16M  1.9G   1% /dev/shm
+tmpfs           1.9G  217M  1.7G  12% /run
+tmpfs           5.0M  4.0K  5.0M   1% /run/lock
+tmpfs           1.9G     0  1.9G   0% /sys/fs/cgroup
+/dev/mmcblk0p6  253M   49M  204M  20% /boot
+tmpfs           384M     0  384M   0% /run/user/999
+tmpfs           384M  4.0K  384M   1% /run/user/1000
+tmpfs           384M     0  384M   0% /run/user/1001
 ```
-
+- From RHEL 8.4
+```
+	$ df -hP
+Filesystem             Size  Used Avail Use% Mounted on
+devtmpfs               1.8G     0  1.8G   0% /dev
+tmpfs                  1.9G     0  1.9G   0% /dev/shm
+tmpfs                  1.9G   18M  1.9G   1% /run
+tmpfs                  1.9G     0  1.9G   0% /sys/fs/cgroup
+/dev/mapper/rhel-root   64G  5.4G   59G   9% /
+/dev/sda2             1014M  339M  676M  34% /boot
+/dev/mapper/rhel-home   31G  268M   31G   1% /home
+/dev/sda1              599M  5.8M  594M   1% /boot/efi
+tmpfs                  374M   12K  374M   1% /run/user/42
+tmpfs                  374M  4.0K  374M   1% /run/user/1000
+```	
