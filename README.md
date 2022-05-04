@@ -347,19 +347,19 @@ Identified by first letter d - directory, s - socket, b - block device, l link, 
 
 
 ### Filesystem Hierarchy
-/ - root partition  
-/bin - (binary) basic programs and binaries date, cp, etc commands  
-/boot  
-/dev - (device) /dev file system contains special block and character device files.  Contains devices external hard disks, mouse and keyboard.  For example you will see a USB drive mounted under media with a /dev path.
-/etc - (editable-text configurations) stores most configuration files  
-/home  - home directory contains all home directories for users except the root user.  The root user's home direct is located at /root. 
-/lib - (LibraryO and /lib64 shared libraries imported in to programs  
-/media - USB drive mounted under media all external media is mounted under media file systems 
-/mnt -  (mount as in mounting file systesm) used to temporariy mount file systems to copy files or access other drives 
-/opt - (optional as in optional add-on package) install any 3rd part apps  
-/tmp - (temporary) used to store temporary data  
-/usr - (user) old systems kept home directory,  Now user space programs are kept here.  Or user land programs lke thunderbird email, and browser programs  
-/var - (variable - holds variable data - some 3rd party apps maybe installed here) system writes logs and cached data to var  
+/ - root partition   
+/bin - (binary) basic programs and binaries date, cp, etc commands   
+/boot   
+/dev - (device) /dev file system contains special block and character device files.  Contains devices external hard disks, mouse and keyboard.  For example you will see a USB drive mounted under media with a /dev path.    
+/etc - (editable-text configurations) stores most configuration files   
+/home  - home directory contains all home directories for users except the root user.  The root user's home direct is located at /root       
+/lib - (LibraryO and /lib64 shared libraries imported in to programs   
+/media - USB drive mounted under media all external media is mounted under media file systems   
+/mnt -  (mount as in mounting file systesm) used to temporariy mount file systems to copy files or access other drives   
+/opt - (optional as in optional add-on package) install any 3rd part apps    
+/tmp - (temporary) used to store temporary data    
+/usr - (user) old systems kept home directory,  Now user space programs are kept here.  Or user land programs lke thunderbird email, and browser programs    
+/var - (variable - holds variable data - some 3rd party apps maybe installed here) system writes logs and cached data to var    
 
 Use this command to see all mounted file systesm
 ```
