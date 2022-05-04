@@ -187,6 +187,12 @@ Memory block size:       128M
 Total online memory:       4G
 Total offline memory:      0B
 ```
+```
+$ lsmem --summary
+Memory block size:       128M
+Total online memory:       4G
+Total offline memory:      0B
+```
 - Debian example
 ```
 $ lsmem
