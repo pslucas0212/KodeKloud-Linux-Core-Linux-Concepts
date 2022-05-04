@@ -352,7 +352,7 @@ Identified by first letter d - directory, s - socket, b - block device, l link, 
 /boot  
 /dev - (device) /dev file system contains special block and character device files.  Contains devices external hard disks, mouse and keyboard.  For example you will see a USB drive mounted under media with a /dev path.
 /etc - (editable-text configurations) stores most configuration files  
-/home  - home directory contains all home directories for users except the root user.  The root user's home direct is located at /root
+/home  - home directory contains all home directories for users except the root user.  The root user's home direct is located at /root. 
 /lib - (LibraryO and /lib64 shared libraries imported in to programs  
 /media - USB drive mounted under media all external media is mounted under media file systems 
 /mnt -  (mount as in mounting file systesm) used to temporariy mount file systems to copy files or access other drives 
