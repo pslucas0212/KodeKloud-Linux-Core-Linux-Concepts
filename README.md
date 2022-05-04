@@ -32,8 +32,8 @@ $ uname -r
 - Memory management is what of the most task of the kernel
 - memory is divided into two spaces: ***Kernel space*** and ***User space***
   - **Kernel space** conatins the kernel (code and extensions) and hardware device drives and a process running in the kernel space has unrestricted access to hardware and runs the Kernel code, kernel extensions and device drivers
-  - User space contains application and programs - all process running outside kernel space which restricts access to h/w
-    - **User space** applications - user space also called user land
+  - **User space** contains application and programs - all process running outside kernel space which restricts access to h/w
+    - User space applications - user space also called user land
     - Applications get access to data and code in memory and/or on disk by making system calls to the kernel (see following examples)
 	- Opening a file 
 	- write a file
