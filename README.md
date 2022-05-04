@@ -47,7 +47,7 @@ $ uname -r
 
 - system calls include open(), close()
 
-#### Working Hardware
+#### Working with Hardware
 - When attaching a device like a USB disk to the system gerneraters a kernel event where the device driver for the USB disk is loaded into the kernel space.  The event is know as a uevent which is sent to the user device management system daemon called udev in the user space.  The udev services dynamically creates device node created on the device folder /dev/usb
 
 
