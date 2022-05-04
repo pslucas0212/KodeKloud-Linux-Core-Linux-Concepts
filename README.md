@@ -48,14 +48,27 @@ $ uname -r
 - system calls include open(), close()
 
 #### Working with Hardware
-- When attaching a device like a USB disk to the system gerneraters a kernel event where the device driver for the USB disk is loaded into the kernel space.  The event is know as a uevent which is sent to the user device management system daemon called udev in the user space.  The udev services dynamically creates device node created on the device folder /dev/usb
+- When attaching a device like a USB disk to the system generates a kernel event where the device driver for the USB disk is loaded into the kernel space.  The event is known as a uevent which is sent to the user device management system daemon called udev in the user space.  The udev services dynamically creates device node created on the device folder /dev/usb
 
 
-- dmesg tool get messages from the ring buffer
+- dmesg tool get messages from the ring buffer.  Debian example below.
 ```
 $ dmesg | grep -i usb
+[    0.152156] usbcore: registered new interface driver usbfs
+[    0.152215] usbcore: registered new interface driver hub
+[    0.152290] usbcore: registered new device driver usb
+...
 ```
-- udevadm ia admin tool can query the udev database
+- RHEL Example below
+```
+$ dmesg | grep -i usb
+[    0.115188] ACPI: bus type USB registered
+[    0.115188] usbcore: registered new interface driver usbfs
+[    0.115188] usbcore: registered new interface driver hub
+[    0.115188] usbcore: registered new device driver usb
+...
+```
+- udevadm ia admin tool can query the udev database.  Example from debian that has a USB device loaded.
 	
 ```
 $ udevadm info --query=path --name=/dev/ttyUSB0
@@ -64,16 +77,37 @@ $ udevadm info --query=path --name=/dev/ttyUSB0
 
 - udevadm monitor is used for monitoring udev events especially when attaching or removing devices
 ```
-$ udevadm monitor
+ $ udevadm monitor
+monitor will print the received events for:
+UDEV - the event which udev sends out after rule processing
+KERNEL - the kernel uevent
+
+
 ```
 
-- lspci - list info about pci devices - like network cards, video cards, any device that attaches directly to the mother board via PCI.
+- lspci - list info about pci devices - like network cards, video cards, any device that attaches directly to the mother board via PCI.  Deiban example below.
 ```
 $ lspci
 00:00.0 PCI bridge: Broadcom Limited Device 2711 (rev 10)
 01:00.0 USB controller: VIA Technologies, Inc. VL805 USB 3.0 Host Controller (rev 01)
+
 ```
 - lsblk - list information about block devices - like physical devices.  Type disk refers to the entire disk and part refers to partion carved out of the disk.  MAJ:MIN - major min number of device driver 
+
+- RHEL example running as a virtual machine on vSphere:
+```
+$ lsblk
+NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda             8:0    0  100G  0 disk 
+├─sda1          8:1    0  600M  0 part /boot/efi
+├─sda2          8:2    0    1G  0 part /boot
+└─sda3          8:3    0 98.4G  0 part 
+  ├─rhel-root 253:0    0 63.5G  0 lvm  /
+  ├─rhel-swap 253:1    0    4G  0 lvm  [SWAP]
+  └─rhel-home 253:2    0   31G  0 lvm  /home
+sr0            11:0    1 10.2G  0 rom  
+```
+- Debian example running on a Raspberry PI with a 32GB SDXC card for its drive
 ```
 $ lsblk
 NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -88,6 +122,36 @@ mmcblk0     179:0    0 29.8G  0 disk
 - Major:Minor - major number with associated device defines associated device drive, minor number differntiates between associated partsions
 	
 - lscpu - CPU architecture - 32-bit or 64-bit processors, number cores, type of processor, etc.
+- RHEL example running as a virtual machine on vSphere:
+```
+ lscpu
+Architecture:        x86_64
+CPU op-mode(s):      32-bit, 64-bit
+Byte Order:          Little Endian
+CPU(s):              2
+On-line CPU(s) list: 0,1
+Thread(s) per core:  1
+Core(s) per socket:  1
+Socket(s):           2
+NUMA node(s):        1
+Vendor ID:           AuthenticAMD
+CPU family:          23
+Model:               8
+Model name:          AMD Ryzen 7 2700X Eight-Core Processor
+Stepping:            2
+CPU MHz:             3792.874
+BogoMIPS:            7585.74
+Hypervisor vendor:   VMware
+Virtualization type: full
+L1d cache:           32K
+L1i cache:           64K
+L2 cache:            512K
+L3 cache:            16384K
+NUMA node0 CPU(s):   0,1
+Flags:               ...
+```
+- Debian example
+
 ```
 $ lscpu
 Architecture:        armv7l
@@ -108,19 +172,43 @@ Flags:               half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idi
 ```
 
 - lsmem --summary - list available memory on the system
+- RHEL example:
 ```
-lsmem --summary
+$ lsmem
+RANGE                                  SIZE  STATE REMOVABLE BLOCK
+0x0000000000000000-0x000000001fffffff  512M online        no   0-3
+0x0000000020000000-0x0000000027ffffff  128M online       yes     4
+0x0000000028000000-0x000000006fffffff  1.1G online        no  5-13
+0x0000000070000000-0x00000000afffffff    1G online       yes 14-21
+0x00000000b0000000-0x00000000bfffffff  256M online        no 22-23
+0x0000000100000000-0x000000013fffffff    1G online        no 32-39
+
 Memory block size:       128M
 Total online memory:       4G
 Total offline memory:      0B
 ```
+- Debian example
+```
+$ lsmem
+lsmem: This system does not support memory blocks
+```
 
 - free -m - list free memory -m megabyte, -k kilobbyte, -g gb
+- RHEL example
 ```
 $ free -m
               total        used        free      shared  buff/cache   available
-Mem:           3735         797        1823          18        1114        2670
+Mem:           3735         857        1539          26        1338        2569
 Swap:          4055           0        4055
+```
+
+- Debian example
+```
+$ free -m
+              total        used        free      shared  buff/cache   available
+Mem:           3838         152        3004          35         681        3519
+Swap:            99           0          99
+
 ```
 
 - lshw - extract detail information on the hardware
@@ -142,32 +230,40 @@ $ sudo lshw
 
 There are two Ways to Start a linux device in stopped or halted state or reboot running system
 
-- BIOS POST has nothing to do with Linux. The power on self test (POST - make sure all devices attached the systme can start (checks all h/w). If there is an problem, then system will not proceed to the boot stage.    
-- After a successful POST the BIOS loads and executes the boot code which is located in the first sector of harddrive.  In Linux located in /boot file system.  It loads the boot process with the boot screen tha hats optional sections.  It then loads the kernel code into memory and hands over control to the kermel
-	- Grand Unified Boot Load (GRUB 2) - primary boot loader for most Linux distros
-	- Kernel is decompressed after loading. Kernels in a compressed space to save memory.  It then initialized h/w and setups memoty - the kernel is loaded into memory
-  	-   After kernel is loaded it looks for an init process to setup user space
-	- Then the kernel lookds for an INIT process starts systemd.  It's responsible in bringing the system to a ready state.
+- BIOS POST has nothing to do with Linux. This is the h/w "boot" or start up process.  The power on self test (POST - make sure all devices attached the systme can start (checks all h/w). If there is an problem, then system will not proceed to the boot stage.    
+- After a successful POST the BIOS loads and executes the boot code which is located in the first sector of harddrive.  In Linux the boot code is typically located in /boot file system.  It loads the boot process with the boot screen tha has optional sections.  It then loads the kernel code into memory and hands over control to the kermel
+	- Grand Unified Boot Load (GRUB 2) - primary boot loader for most Linux distros currently
+	- Kernel is decompressed after loading. Kernel is in a compressed space to save memory.  The kernel then initalized the h/w and "sets up" memory - the kernel is loaded into memory
+  	-  After the kernel is loaded it looks for an init process to setup the user space
+	- Then the kernel looks for an INIT process and starts systemd.  It's responsible in bringing the system to a ready state.
   	-   systemd start system services, mounts drives, etc.  (System V or sysV init was the old services system).  Systemd reduces start up time since it runs services start up in parallel
 
 To see what init process is using run:
+- RHEL example
 ```
-ls -l /sbin/init
+$ ls -l /sbin/init
+lrwxrwxrwx. 1 root root 22 Jan 25 03:35 /sbin/init -> ../lib/systemd/systemd
+```
+- Debian example
+```
+$ ls -l /sbin/init
 lrwxrwxrwx 1 root root 20 Aug  6  2021 /sbin/init -> /lib/systemd/systemd
 ```
 
 
 ### Run Levels
-Linux can run in multiple modes set by the run level like the graphical mode.  These are call run levels.  Type the following to see the level
+Linux can run in multiple modes set by the run level like the graphical mode.  These are call run levels.  Type the following to see the run level
+- RHEL example with GUI enabled
 ```
 $ runlevel
 N 5
 ```
+
 - Run levels include:
 	- Runlevel 5 is the graphical mode
 	- Runlevel 3 is the command line
 
-- During boot the init process checks the runlevel to make sure all systems start to run in the correct mode.  In the Graphical mode graphics service smust run 
+- During boot the init process checks the runlevel to make sure all systems start to run in the correct mode.  In the Graphical mode, the graphics service are started and running
 
 In newer Linux distros systemd is used as the init process.  Systemd runlevels are called systemd targets.  Run level 3 and 5 are the most commonly used run target levels
 
