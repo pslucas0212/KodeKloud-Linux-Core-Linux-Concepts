@@ -3,14 +3,14 @@
 [KodeKloud Linux Basics Course Notes Table of Contents](https://github.com/pslucas0212/LinuxBasics)
 
 ### Linux Kernel
-- The kernel is the interface between applciations/processes and the underlying h/w - CPU, Memory, Storage, I/O.  The kernel manages and schedules resources
+- The kernel is the interface between applciations/processes and the underlying h/w, CPU, Memory, Storage, I/O.  The kernel manages and schedules resources
 - Kernel is responsible for 4 major tasks
   - Memory Mangement
   - Process managment - who can use the CPU when
   - Device Drivers 
   - Systems Calls and security
 - Kernel is monolithic - carries out the work above by itself
-- Kernel is modular - can extend its capability by loading dynamic extenxsions of the kernel																			
+- Kernel is modular in that the kernel can extend its capability by loading dynamic extenxsions to the kernel																			
 - Hardware <--- Kernel Space (([Device Drivers)([kernel)) <--- System calls ---- User Space (Applications/Programs)
 
 - To see kernel name type
