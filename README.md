@@ -18,7 +18,7 @@
 $ uname
 Linux
 ```
-- To see kernel version type 
+- To see kernel version type (debian example)
 ```
 $ uname -r
 5.10.63-v7l+
@@ -276,7 +276,7 @@ tmpfs           384M     0  384M   0% /run/user/1001
 ```
 - From RHEL 8.4
 ```
-	$ df -hP
+$ df -hP
 Filesystem             Size  Used Avail Use% Mounted on
 devtmpfs               1.8G     0  1.8G   0% /dev
 tmpfs                  1.9G     0  1.9G   0% /dev/shm
