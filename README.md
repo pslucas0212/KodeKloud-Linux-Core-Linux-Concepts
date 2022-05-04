@@ -23,7 +23,7 @@ Linux
 $ uname -r
 5.10.63-v7l+
 ```
-- '<kernel version>.<Major version><Minor vers><patch release>' and may include distro specif information
+- 'kernel version.Major version.Minor vers.patch release' and may include distro specif information
 	
 	
 - See the kernel.org webssite to get more information on the Linux kernel
