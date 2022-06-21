@@ -3,36 +3,52 @@
 [KodeKloud Linux Basics Course Notes Table of Contents](https://github.com/pslucas0212/LinuxBasics)
 
 ### Linux Kernel
-- The kernel is the interface between applciations/processes and the underlying h/w, CPU, Memory, Storage, I/O.  The kernel manages and schedules resources
-- Kernel is responsible for 4 major tasks
-  - Memory Mangement
-  - Process managment - who can use the CPU when
+The kernel is the major compont of an OS.  It is the interface between applciations/processes and the underlying h/w, CPU, Memory, Storage, I/O.  The kernel manages and schedules resources.
+
+Kernel is responsible for 4 major tasks
+  - Memory Mangement - keep track of how much is consmed and where things are stored
+  - Process managment - who can use the CPU when and for how long
   - Device Drivers 
   - Systems Calls and security
-- Kernel is monolithic - carries out the work above by itself
-- Kernel is modular in that the kernel can extend its capability by loading dynamic extenxsions to the kernel																			
-- Hardware <--- Kernel Space (([Device Drivers)([kernel)) <--- System calls ---- User Space (Applications/Programs)
 
-- To see kernel name type
+Kernel is monolithic - carries out the work (CPU and memomry management, etc.) above by itself   
+Kernel is modular in that the kernel can extend its capability by loading dynamic extenxsions to the kernel   																			
+Hardware <--- Kernel Space (([Device Drivers)([kernel)) <--- System calls ---- User Space (Applications/Programs)  
+
+To see kernel name type
 ```
 $ uname
 Linux
 ```
-- To see kernel version type (debian example)
+
+To see kernel version type (debian example) add the -r
 ```
 $ uname -r
 5.10.63-v7l+
 ```
-- 'kernel version.Major version.Minor vers.patch release' and may include distro specif information
-	
-	
-- See the kernel.org webssite to get more information on the Linux kernel
+Example from KodeKLoud
+```
+$ uname -r
+4.15.0-72-generic
+```
+Number | Meaning
+-------|--------
+4 | Kernel version
+15 | Majgor release
+0| Minor release
+72 | Patch
+Generic | Distro specific a
 
-#### Kernel and User Space
-- Memory management is what of the most task of the kernel
-- memory is divided into two spaces: ***Kernel space*** and ***User space***
+'kernel version.Major version.Minor vers.patch release' and may include distro specif information
+	
+	
+ See the kernel.org webssite to get more information on the Linux kernel
+
+### Kernel and User Space
+Memory management is one of the most task of the kernel
+Memory is divided into two areas: ***Kernel space*** and ***User space***. These are synomou to kerne and user mored
   - **Kernel space** conatins the kernel (code and extensions) and hardware device drives and a process running in the kernel space has unrestricted access to hardware and runs the Kernel code, kernel extensions and device drivers
-  - **User space** contains application and programs - all process running outside kernel space which restricts access to h/w
+  - **User space** contains application and programs - all process running outside kernel space which restricts access to cpu and memory
     - User space applications - user space also called user land
     - Applications get access to data and code in memory and/or on disk by making system calls to the kernel (see following examples)
 	- Opening a file 
@@ -41,17 +57,15 @@ $ uname -r
 	- Allocating memory by defining a variable
     - examples: programs written in Java, C, Python
 	
+All user programs function by manipulating data.  Data for users stored in memory or disk.  Applications in the user space access data by making system calls to the kernel space, which in turn makes calls to device drivers to the underlying physical hardware
 
-- Data for users stored in memory or disk.  Applications in the user space access data by making system calls to the kernel space, which in turn makes calls to device drivers to the underlying physical hardware
+Common system calls include getpid(), open(), close(), closedir(), readdir(), strlen()
 
-
-- system calls include open(), close()
-
-#### Working with Hardware
-- When attaching a device like a USB disk to the system generates a kernel event where the device driver for the USB disk is loaded into the kernel space.  The event is known as a uevent which is sent to the user device management system daemon called udev in the user space.  The udev services dynamically creates device node created on the device folder /dev/usb
+### Working with Hardware
+When attaching a device like a USB disk to the system generates a kernel event where the device driver for the USB disk is loaded into the kernel space.  The OS dectects the change and generates an event. The event is known as a uevent which is sent to the user device management system daemon called udev in the user space.  The udev services dynamically creates device node created on the device folder /dev/usb
 
 
-- dmesg tool get messages from the ring buffer.  Debian example below.
+dmesg is a tool that gets messages from the ring buffer.  Searching for specific keywords example follows.
 ```
 $ dmesg | grep -i usb
 [    0.152156] usbcore: registered new interface driver usbfs
@@ -68,14 +82,14 @@ $ dmesg | grep -i usb
 [    0.115188] usbcore: registered new device driver usb
 ...
 ```
-- udevadm ia admin tool can query the udev database.  Example from debian that has a USB device loaded.
+The udevadm utitily is an admin tool can query the udev database.  Example from debian that has a USB device loaded.
 	
 ```
 $ udevadm info --query=path --name=/dev/ttyUSB0
 /devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.3/1-1.3:1.0/ttyUSB0/tty/ttyUSB0
 ```
 
-- udevadm monitor is used for monitoring udev events especially when attaching or removing devices
+udevadm monitor is used for monitoring udev events especially when attaching or removing devices
 ```
  $ udevadm monitor
 monitor will print the received events for:
@@ -85,16 +99,16 @@ KERNEL - the kernel uevent
 
 ```
 
-- lspci - list info about pci devices - like network cards, video cards, any device that attaches directly to the mother board via PCI.  Deiban example below.
+lspci - list info about pci devices - like network cards, video cards, wireless cards and any device that attaches directly to the mother board via PCI slots.  Deiban example below.  PCI stands for peripheral component interconneect
 ```
 $ lspci
 00:00.0 PCI bridge: Broadcom Limited Device 2711 (rev 10)
 01:00.0 USB controller: VIA Technologies, Inc. VL805 USB 3.0 Host Controller (rev 01)
 
 ```
-- lsblk - list information about block devices - like physical devices.  Type disk refers to the entire disk and part refers to partion carved out of the disk.  MAJ:MIN - major min number of device driver 
+The lsblk command - list information about block devices - like physical devices.  Type disk refers to the entire physical disk and partition refers to partion carved out of the disk.  MAJ:MIN - major min number of device driver 
 
-- RHEL example running as a virtual machine on vSphere:
+RHEL example running as a virtual machine on vSphere:
 ```
 $ lsblk
 NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -121,8 +135,9 @@ mmcblk0     179:0    0 29.8G  0 disk
 - mmcblk0 is physical disk - p1 through p5 are resuable partitions created for the disk
 - Major:Minor - major number with associated device defines associated device drive, minor number differntiates between associated partsions
 	
-- lscpu - CPU architecture - 32-bit or 64-bit processors, number cores, type of processor, etc.
-- RHEL example running as a virtual machine on vSphere:
+The lscpu utility- CPU architecture - 32-bit or 64-bit processors, number cores, type of processor, etc.
+
+RHEL example running as a virtual machine on vSphere:
 ```
  lscpu
 Architecture:        x86_64
@@ -170,6 +185,7 @@ CPU min MHz:         600.0000
 BogoMIPS:            108.00
 Flags:               half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm crc32
 ```
+
 
 - lsmem --summary - list available memory on the system
 - RHEL example:
