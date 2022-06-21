@@ -99,7 +99,7 @@ KERNEL - the kernel uevent
 
 ```
 
-lspci - list info about pci devices - like network cards, video cards, wireless cards and any device that attaches directly to the mother board via PCI slots.  Deiban example below.  PCI stands for peripheral component interconneect
+The lspci command- list info about pci devices - like network cards, video cards, wireless cards and any device that attaches directly to the mother board via PCI slots.  Deiban example below.  PCI stands for peripheral component interconneect
 ```
 $ lspci
 00:00.0 PCI bridge: Broadcom Limited Device 2711 (rev 10)
@@ -186,9 +186,10 @@ BogoMIPS:            108.00
 Flags:               half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm crc32
 ```
 
+Total number of threads availabel is equal to sockets X Cores X thrads
 
-- lsmem --summary - list available memory on the system
-- RHEL example:
+The lsmem command outpus a summer of memory --summary  list available memory on the system
+RHEL example:
 ```
 $ lsmem
 RANGE                                  SIZE  STATE REMOVABLE BLOCK
@@ -215,8 +216,9 @@ $ lsmem
 lsmem: This system does not support memory blocks
 ```
 
-- free -m - list free memory -m megabyte, -k kilobbyte, -g gb
-- RHEL example
+The free -m utilitys list free memory -m megabyte, -k kilobbyte, -g gb
+
+RHEL example
 ```
 $ free -m
               total        used        free      shared  buff/cache   available
@@ -233,18 +235,18 @@ Swap:            99           0          99
 
 ```
 
-- lshw - extract detail information on the hardware
+Utliity lshw - extract detail information on the hardware
 
-#### sudo
+### sudo
 
-- run command as root - with sudo you can determine which commands a user can run as super user and also see a list of commands the user has run as root
+Run command as root - with sudo you can determine which commands a user can run as super user and also see a list of commands the user has run as root
 ```
 $ sudo lshw
 ```
-- With sudo you can control who can run commands as root, which commands/programs that can be run, and replay commands the user has run as sudo
+With sudo you can control who can run commands as root, which commands/programs that can be run, and replay commands the user has run as sudo
 
 ## Linux Boot Sequence
-- Four stages
+Four stages
   -   BIOS Post
   -   Boot Loader - GRUB2
   -   Kernel Initialization
@@ -252,8 +254,9 @@ $ sudo lshw
 
 There are two Ways to Start a linux device in stopped or halted state or reboot running system
 
-- BIOS POST has nothing to do with Linux. This is the h/w "boot" or start up process.  The power on self test (POST - make sure all devices attached the systme can start (checks all h/w). If there is an problem, then system will not proceed to the boot stage.    
-- After a successful POST the BIOS loads and executes the boot code which is located in the first sector of harddrive.  In Linux the boot code is typically located in /boot file system.  It loads the boot process with the boot screen tha has optional sections.  It then loads the kernel code into memory and hands over control to the kermel
+BIOS POST has nothing to do with Linux. This is the h/w "boot" or start up process.  The power on self test (POST - make sure all devices attached the systme can start (checks all h/w). If there is an problem, then system will not proceed to the boot stage.    
+
+After a successful POST the BIOS loads and executes the boot code which is located in the first sector of harddrive.  In Linux the boot code is typically located in /boot file system.  It loads the boot process with the boot screen tha has optional sections.  It then loads the kernel code into memory and hands over control to the kermel
 	- Grand Unified Boot Load (GRUB 2) - primary boot loader for most Linux distros currently
 	- Kernel is decompressed after loading. Kernel is in a compressed space to save memory.  The kernel then initalized the h/w and "sets up" memory - the kernel is loaded into memory
   	-  After the kernel is loaded it looks for an init process to setup the user space
