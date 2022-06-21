@@ -73,7 +73,7 @@ $ dmesg | grep -i usb
 [    0.152290] usbcore: registered new device driver usb
 ...
 ```
-- RHEL Example below
+RHEL Example below
 ```
 $ dmesg | grep -i usb
 [    0.115188] ACPI: bus type USB registered
@@ -89,7 +89,7 @@ $ udevadm info --query=path --name=/dev/ttyUSB0
 /devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.3/1-1.3:1.0/ttyUSB0/tty/ttyUSB0
 ```
 
-udevadm monitor is used for monitoring udev events especially when attaching or removing devices
+The udevadm monitor is used for monitoring udev events especially when attaching or removing devices
 ```
  $ udevadm monitor
 monitor will print the received events for:
@@ -245,23 +245,32 @@ $ sudo lshw
 ```
 With sudo you can control who can run commands as root, which commands/programs that can be run, and replay commands the user has run as sudo
 
-## Linux Boot Sequence
+### Lab Example
+
+What verstion of the kernel?
+```
+$ uname -r
+5.4.0-1028-gcp
+```
+
+### Linux Boot Sequence
 Four stages
   -   BIOS Post
   -   Boot Loader - GRUB2
   -   Kernel Initialization
   -   INIT process (service initalization using systemd)
 
-There are two Ways to Start a linux device in stopped or halted state or reboot running system
+There are two Ways to Start a linux device in stopped or halted state or reboot or reset a running system
 
 BIOS POST has nothing to do with Linux. This is the h/w "boot" or start up process.  The power on self test (POST - make sure all devices attached the systme can start (checks all h/w). If there is an problem, then system will not proceed to the boot stage.    
 
-After a successful POST the BIOS loads and executes the boot code which is located in the first sector of harddrive.  In Linux the boot code is typically located in /boot file system.  It loads the boot process with the boot screen tha has optional sections.  It then loads the kernel code into memory and hands over control to the kermel
+After a successful POST (Power On Self-Test) the BIOS loads and executes the boot code from the boot device which is located in the first sector of harddrive.  In Linux the boot code is typically located in /boot file system.  It loads the boot process with the boot screen tha has optional sections.  It then loads the kernel code into memory with some paramaters, and hands over control to the kermel
 	- Grand Unified Boot Load (GRUB 2) - primary boot loader for most Linux distros currently
-	- Kernel is decompressed after loading. Kernel is in a compressed space to save memory.  The kernel then initalized the h/w and "sets up" memory - the kernel is loaded into memory
+	- After selected kernel is load into to memory, Kernel is decompressed after loading. Kernel is in a compressed space to save memory.  The kernel then initalized the h/w and "sets up" memory - the kernel is loaded into memory
   	-  After the kernel is loaded it looks for an init process to setup the user space
-	- Then the kernel looks for an INIT process and starts systemd.  It's responsible in bringing the system to a ready state.
-  	-   systemd start system services, mounts drives, etc.  (System V or sysV init was the old services system).  Systemd reduces start up time since it runs services start up in parallel
+	
+Then the kernel looks for an INIT process and starts systemd.  It's responsible in bringing the system to a ready state.
+  	-   systemd starts and manages system services, mounts drives, etc.  (System V or sysV init was the old services system).  Systemd reduces start up time since it runs services start up in parallel
 
 To see what init process is using run:
 - RHEL example
@@ -277,18 +286,19 @@ lrwxrwxrwx 1 root root 20 Aug  6  2021 /sbin/init -> /lib/systemd/systemd
 
 
 ### Run Levels
-Linux can run in multiple modes set by the run level like the graphical mode.  These are call run levels.  Type the following to see the run level
+Linux can run in multiple modes set by the run level like the graphical mode.  These are call run levels.  Opration is setup by run level. Type the following to see the run level
+
 - RHEL example with GUI enabled
 ```
 $ runlevel
 N 5
 ```
 
-- Run levels include:
+Run levels include:
 	- Runlevel 5 is the graphical mode
 	- Runlevel 3 is the command line
 
-- During boot the init process checks the runlevel to make sure all systems start to run in the correct mode.  In the Graphical mode, the graphics service are started and running
+During boot the init process checks the runlevel to make sure all systems start to run in the correct mode.  In the Graphical mode, the graphics service are started and running
 
 In newer Linux distros systemd is used as the init process.  Systemd runlevels are called systemd targets.  Run level 3 and 5 are the most commonly used run target levels
 
@@ -297,15 +307,16 @@ Runlevel | System Targets | Function
 3 | graphical.target | Boots into a Graphical interface
 5 | multiuser.target | Boots into a Command Line Interface
 
-	
-To see systemd target type:
+In sysetemd run levels are called systemtargets.
+
+To see systemd target leel:
 ```
 $ systemctl get-default
 graphical.target
 $ ls -ltr /etc/systemd/system/default.target
 lrwxrwxrwx 1 root root 36 Feb 13  2020 /etc/systemd/system/default.target -> /lib/systemd/system/graphical.target
 ```
-The command 'systemctl get-default' looks up the default.target file located in /etc/systemd/system/default.target.  You can see this has symbolic link
+The command 'systemctl get-default' looks up the default.target file located in /etc/systemd/system/default.target.  You can see this has a symbolic link
 
 Change systemd target (this example changes the run level from 5 to 3):
 ```
@@ -327,24 +338,26 @@ runlevel 6 | reboot.target
 ### File types
 "Everything is a file in Linux" - every object in linux is a "type" of file
 Three types of files
-- regular files - most common files containing text, images, scripts, configuration, shell scripts, jpeg
-- directory - stores other directories and files
-- special files (5 types_
-  -  Character files - represent devices under /dev - mouse, keyboard
-  -  Block files - under /dev - a block device reads to from and writes to a device in chunks of block either memory or hard disk
-  -  Links: Links to data to Hard links and symbolic links (like a short cut or alias and are independent).   
+- Regular files.  THere are most common type of files containing text, images, scripts, configuration, shell scripts, jpeg, etc.
+- Directory.  Type of file that stores other directories and files
+- Special files (5 types)
+  -  Character files - The files reepresent devices under /dev that allow devices to communicate to the OS serially.  Exampes: mouse, keyboard
+  -  Block files - These represent block devices under /dev - a block device reads to from and writes to a device in chunks of block either memory or hard disk
+  -  Links: Links to data to Hard links and symbolic links (like a short cut or alias and are independent). 
+  	-  Hard link, link same file.  Deleting hard link deletes file
+  	-  	oft link is like a short cut to the actaul file  
   -  Sockets - communication between two processes
   -  Named pipes - speciaal process connection data between processes Data can flow bi-directionly
 
 
-Identify file type
+Identify file type or display file type
 ```
 $ file /home/pslucas
 /home/pslucas: directory
 $ file /home/pslucas/text.txt 
 /home/pslucas/text.txt: ASCII text
 ```
-or use the list command 'ls' command to identify file type by the output
+or use the list command 'ls' command with -l long switch to identify file type by the output
 ```
 $ ls -ld /home/pslucas/
 drwxr-xr-x 7 pslucas pslucas 4096 Apr 25 19:53 /home/pslucas/
@@ -367,13 +380,13 @@ Identified by first letter d - directory, s - socket, b - block device, l link, 
 
 ### Filesystem Hierarchy
 **/** - root partition   
-**/bin** - (binary) basic programs and binaries date, cp, etc commands   
+**/bin** - (binary) basic programs and binaries date, cp, mkdir, etc. commands are stored in the bin direcotry
 **/boot**   
 **/dev** - (device) /dev file system contains special block and character device files.  Contains devices external hard disks, mouse and keyboard.  For example you will see a USB drive mounted under media with a /dev path.    
 **/etc** - (editable-text configurations) stores most configuration files   
 **/home**  - home directory contains all home directories for users except the root user.  The root user's home direct is located at /root       
 **/lib** - (LibraryO and /lib64 shared libraries imported in to programs   
-**/media** - USB drive mounted under media all external media is mounted under media file systems   
+**/media** - USB drive mounted under. media all external media is mounted under media file systems   
 **/mnt** -  (mount as in mounting file systesm) used to temporariy mount file systems to copy files or access other drives   
 **/opt** - (optional as in optional add-on package) install any 3rd part apps    
 **/tmp** - (temporary) used to store temporary data    
@@ -410,3 +423,33 @@ tmpfs                  1.9G     0  1.9G   0% /sys/fs/cgroup
 tmpfs                  374M   12K  374M   1% /run/user/42
 tmpfs                  374M  4.0K  374M   1% /run/user/1000
 ```	
+### Lab example
+What's the init process for this system?
+```
+$ ls -l /sbin/init
+lrwxrwxrwx 1 nobody nogroup 20 Feb  6  2020 /sbin/init -> /lib/systemd/systemd
+```
+
+What's the systemd defaault target?
+```
+$ sudo systemctl get-default
+graphical.target
+```
+
+Set systemd target to multi-user.target
+```
+$ sudo systemctl set-default multi-user.target
+Created symlink /etc/systemd/system/default.target → /lib/systemd/system/multi-user.target.
+```
+
+What type of file is firefox.deb in /root
+```
+$ sudo file /root/firefox.deb
+/root/firefox.deb: Debian binary package (format 2.0)
+```
+
+What is the type of file is /root/sample_script.sh?
+```
+$ sudo file /root/sample_script.sh
+/root/sample_script.sh: Bourne-Again shell script, ASCII text executable
+```
